@@ -1,0 +1,2 @@
+# puppet generated configuration
+mdm <%= ${ $mdm_ip.join(', ') } %>

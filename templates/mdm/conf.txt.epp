@@ -1,0 +1,7 @@
+rep_dev_name=/opt/emc/scaleio/mdm/rep/mdm_rep.bin
+rep_shm_name=scaleio_mdm_rep_shm
+actor_rep_dev_name=/opt/emc/scaleio/mdm/rep/actor_rep.bin
+actor_rep_shm_name=scaleio_actor_shm
+actor_local_voter_rep_dev_name=/opt/emc/scaleio/mdm/rep/actor_local_voter_rep.bin
+actor_local_voter_rep_shm_name=scaleio_voter_shm
+actor_role_is_manager=<%= $actor_role_is_manager %>
