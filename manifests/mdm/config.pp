@@ -12,19 +12,22 @@ class scaleio2::mdm::config {
   $ip_address_array = $scaleio2::mdm::ip_address_array
   $is_manager       = $scaleio2::mdm::is_manager
 
-  contain scaleio2::mdm::config::login
-  contain scaleio2::mdm::config::role
-  contain scaleio2::mdm::config::cluster
-  contain scaleio2::mdm::config::backend
-  contain scaleio2::mdm::config::frontend
 
   notify { "scaleio2::mdm::config->start": }
 
-  Class['::scaleio2::mdm::config::login'] ->
-  Class['::scaleio2::mdm::config::role'] ->
-  Class['::scaleio2::mdm::config::cluster'] ->
-  Class['::scaleio2::mdm::config::backend'] ->
-  Class['::scaleio2::mdm::config::frontend']
+  contain scaleio2::mdm::config::role
+  Class['::scaleio2::mdm::config::role']
+
+  if ( $mdm_ip[0] in $ip_address_array) {
+    contain scaleio2::mdm::config::login
+    contain scaleio2::mdm::config::cluster
+    contain scaleio2::mdm::config::backend
+    contain scaleio2::mdm::config::frontend
+
+    Class['::scaleio2::mdm::config::cluster'] ->
+    Class['::scaleio2::mdm::config::backend'] ->
+    Class['::scaleio2::mdm::config::frontend']
+  }
 
   notify { "scaleio2::mdm::config->end": }
 }

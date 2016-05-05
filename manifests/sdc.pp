@@ -1,10 +1,11 @@
-class scaleio2::sdc {
-  $version    = $scaleio2::version
-  $pkgs       = $scaleio2::pkgs
+class scaleio2::sdc (
+  $mdm_ip     = $scaleio2::params::mdm_ip,
+  $pkgs       = $scaleio2::params::pkg
+) inherits scaleio2::params {
 
-  include ::scaleio2::sdc::config
-  include ::scaleio2::sdc::install
-  include ::scaleio2::sdc::service
+  contain scaleio2::sdc::config
+  contain scaleio2::sdc::install
+  contain scaleio2::sdc::service
 
   Class ['::scaleio2::sdc::install'] ->
   Class ['::scaleio2::sdc::config'] ->

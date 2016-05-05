@@ -1,5 +1,4 @@
 
-$version = '2.0'
 $mdm_ip = [ '192.168.69.150' ]
 $tb_ip = [ '192.168.69.150' ]
 $password = 'Scaleio123'
@@ -65,8 +64,8 @@ node /localhost/ {
         password => $password,
         mdm_ip => $mdm_ip,
         tb_ip => $tb_ip,
-  #      sio_sds => $sio_sds,
-  #      sio_sdc => $sio_sdc,
-        components => [ 'mdm' ]
+        sio_sds => $sio_sds,
+        sio_sdc => $sio_sdc,
+        components => [ 'mdm', 'sds', 'lia' ]
   }
 }

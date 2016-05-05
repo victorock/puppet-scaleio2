@@ -1,10 +1,8 @@
 #
 class scaleio2::repo (
   $ensure             = $scaleio2::params::ensure,
-  $version            = $scaleio2::params::version,
   $repo_location      = $scaleio2::params::repo_location,
   $repo_description   = $scaleio2::params::repo_description
-
   ) inherits scaleio2::params {
 
   case $::osfamily {

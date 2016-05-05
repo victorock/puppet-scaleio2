@@ -1,12 +1,10 @@
-class scaleio2::sdc::install (
-  $version   = $scaleio2::params::version,
-  $pkg       = $scaleio2::params::pkg['sdc']
-) inherits scaleio2::sdc {
+class scaleio2::sdc::install {
+  $pkg       = $scaleio2::sdc::pkg
 
-  notify { "scaleio2::sdc::install->start": }
+  notify { "scaleio2::sdc::install->start": } ->
   package { 'scaleio2::sdc::install':
     name    => $pkg,
-    ensure  => $version,
-  }
+    require => Package[ 'numactl', 'libaio' ],
+  } ->
   notify { "scaleio2::sdc::install->end": }
 }

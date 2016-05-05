@@ -1,11 +1,10 @@
-class scaleio2::lia::install inherits scaleio2::lia {
-  $version = $scaleio2::lia::version
-  $pkg     = $scaleio2::lia::pkgs['lia']
+class scaleio2::lia::install {
+  $pkg     = $scaleio2::lia::pkg
 
   notify { "scaleio2::lia::install->start": }
   package { 'scaleio2::lia::install':
     name    => $pkg,
-    ensure  => $version,
+    require => Package[ 'numactl', 'libaio' ],
   }
   notify { "scaleio2::lia::install->end": }
 }

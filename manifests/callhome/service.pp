@@ -1,4 +1,4 @@
-class scaleio2::callhome::service inherits scaleio2::callhome {
+class scaleio2::callhome::service {
 
 notify { "scaleio2::callhome::service->start": }
 

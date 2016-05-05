@@ -1,5 +1,5 @@
 
-class scaleio2::lia::config inherits scaleio2::lia {
+class scaleio2::lia::config {
   notify { "scaleio2::lia::config->start": }
   notify { "scaleio2::lia::config->end": }
 }

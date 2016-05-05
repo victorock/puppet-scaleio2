@@ -1,8 +1,11 @@
 # the installation part
 class scaleio2::sds::install {
-  notify  { "scaleio2::sds::install->start": }
+  $pkg = $scaleio2::sds::pkg
+
+  notify  { "scaleio2::sds::install->start": } ->
   package { "scaleio2::sds::install":
-    name => "EMC-ScaleIO-sds",
-  }
+    name => $pkg,
+    require => Package[ 'numactl', 'libaio' ],
+  } ->
   notify  { "scaleio2::sds::install->end": }
 }

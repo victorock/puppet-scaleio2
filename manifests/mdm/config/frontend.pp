@@ -7,9 +7,6 @@ class scaleio2::mdm::config::frontend {
   $volume_size            = undef
   $sdc_ip                 = undef
 
-  contain scaleio2::mdm::config::frontend::volume
-  contain scaleio2::mdm::config::frontend::map
-  
   notify { "scaleio2::backend::sds::config->start": }
 
   $sio_sdc.each |$entry| {
@@ -19,6 +16,9 @@ class scaleio2::mdm::config::frontend {
     $volume_name            = $entry[1]['volume_name']
     $volume_type            = $entry[1]['volume_type']
     $volume_size            = $entry[1]['volume_size']
+
+    contain scaleio2::mdm::config::frontend::volume
+    contain scaleio2::mdm::config::frontend::map
 
     Class['::scaleio2::mdm::config::frontend::volume'] ->
     Class['::scaleio2::mdm::config::frontend::map']

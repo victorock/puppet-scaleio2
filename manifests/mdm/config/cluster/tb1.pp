@@ -9,7 +9,7 @@ class scaleio2::mdm::config::cluster::tb1 {
     path => ["/usr/bin", "/sbin", "/bin"],
     unless  =>  "scli --query_cluster 2> /dev/null | grep '${my_ip}'",
     require => Class['::scaleio2::mdm::config::login'],
-    onlyif  => "test ! -z '${my_ip}'",
+    onlyif  => "test -n '${my_ip}'",
   } ->
 
   exec { 'scaleio2::mdm::config::cluster::tb1->switch_to_cluster_mode3':

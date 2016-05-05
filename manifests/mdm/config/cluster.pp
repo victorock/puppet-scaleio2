@@ -12,15 +12,12 @@ class scaleio2::mdm::config::cluster {
   contain scaleio2::mdm::config::cluster::tb2
   contain scaleio2::mdm::config::cluster::rename
 
-  notify { "scaleio2::mdm::config::cluster->start": }
+  notify { "scaleio2::mdm::config::cluster->start": } ->
   Class['::scaleio2::mdm::config::cluster::mdm1'] ->
   Class['::scaleio2::mdm::config::cluster::mdm2'] ->
-  Class['::scaleio2::mdm::config::cluster::mdm3']
-
+  Class['::scaleio2::mdm::config::cluster::mdm3'] ->
   Class['::scaleio2::mdm::config::cluster::tb1'] ->
-  Class['::scaleio2::mdm::config::cluster::tb2']
-
-  Class['::scaleio2::mdm::config::cluster::rename']
-
+  Class['::scaleio2::mdm::config::cluster::tb2'] ->
+  Class['::scaleio2::mdm::config::cluster::rename'] ->
   notify { "scaleio2::mdm::config::cluster->end": }
 }

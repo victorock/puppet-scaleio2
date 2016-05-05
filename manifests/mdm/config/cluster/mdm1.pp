@@ -9,7 +9,7 @@ class scaleio2::mdm::config::cluster::mdm1 {
     command => "scli --create_mdm_cluster --master_mdm_ip ${my_ip} --master_mdm_management_ip ${my_ip} --accept_license --approve_certificate",
     path => ["/usr/bin", "/sbin", "/bin"],
     unless  =>  "scli --login --username admin --password ${my_password} --approve_certificate",
-    onlyif  => "test ! -z '${my_ip}'",
+    onlyif  => "test -n '${my_ip}'",
   } ->
 
   exec { 'scaleio2::mdm::config::cluster::mdm1->create_cluster->1st_login':

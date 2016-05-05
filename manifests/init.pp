@@ -7,7 +7,7 @@ class scaleio2 (
   $callhome_cfg         = $scaleio2::params::callhome_cfg,
   $mdm_ip               = $scaleio2::params::mdm_ip,
   $password             = $scaleio2::params::password,
-  $pkgs                 = $scaleio2::params::pkgs,
+  $pkg                  = $scaleio2::params::pkg,
   $repo_location        = $scaleio2::params::repo_location,
   $shm_size             = $scaleio2::params::shm_size,
   $sio_sds_network      = $scaleio2::params::sio_sds_network,
@@ -44,15 +44,23 @@ class scaleio2 (
   if $sds_ssd_env_flag  { validate_bool($sds_ssd_env_flag)  }
   if $use_ssd           { validate_bool($use_ssd)           }
   if $version           { validate_string($version)         }
-  if $install_repo      { class { '::scaleio2::repo': }     }
+  if $install_repo      { validate_bool($install_repo)      }
 
+  if ($install_repo) {
+    class { '::scaleio2::repo': }
+  }
 
   class { '::scaleio2::install': }
 
-  if ( 'lia'       in $components ) { class { '::scaleio2::lia': }       }
+  if ( 'lia'       in $components ) {
+    class { '::scaleio2::lia':
+      pkg => $pkg['lia']
+    }
+  }
 
   if ( 'mdm'       in $components ) {
     class { '::scaleio2::mdm':
+      pkg              => $pkg['mdm'],
       cluster_mode     => $cluster_mode,
       cluster_name     => $cluster_name,
       password         => $password,
@@ -60,14 +68,59 @@ class scaleio2 (
       mdm_ip           => $mdm_ip,
       sio_sds          => $sio_sds,
       sio_sdc          => $sio_sdc,
-      ip_address_array => $ip_address_array
+      ip_address_array => $ip_address_array,
+      is_manager       => 1,
+    }
+  }
+  elsif ( 'tb'       in $components ) {
+    class { '::scaleio2::mdm':
+      pkg              => $pkg['mdm'],
+      cluster_mode     => $cluster_mode,
+      cluster_name     => $cluster_name,
+      password         => $password,
+      tb_ip            => $tb_ip,
+      mdm_ip           => $mdm_ip,
+      sio_sds          => $sio_sds,
+      sio_sdc          => $sio_sdc,
+      ip_address_array => $ip_address_array,
+      is_manager       => 0,
     }
   }
 
-#  if ( 'callhome'  in $components ) { class { '::scaleio2::callhome': }  }
-#  if ( 'gateway'   in $components ) { class { '::scaleio2::gateway': }   }
-#  if ( 'sds'       in $components ) { class { '::scaleio2::sds': }       }
-#  if ( 'sdc'       in $components ) { class { '::scaleio2::sdc': }       }
-#  if ( 'firewall'  in $components ) { class { '::scaleio2::firewall': }  }
+  if ( 'callhome'  in $components ) {
+    class { '::scaleio2::callhome':
+      pkg          => $pkg['callhome'],
+      callhome_cfg => $callhome_cfg
+    }
+  }
+
+  if ( 'gateway'   in $components ) {
+    class { '::scaleio2::gateway':
+      pkg       => $pkg['gateway'],
+      password  => $password,
+      mdm_ip    => $mdm_ip
+    }
+  }
+
+  if ( 'sds'       in $components ) {
+    class { '::scaleio2::sds':
+      pkg               => $pkg['sds'],
+      sio_sds_network   => $sio_sds_network,
+      sds_ssd_env_flag  => $sds_ssd_env_flag
+    }
+  }
+
+  if ( 'sdc'       in $components ) {
+    class { '::scaleio2::sdc':
+      pkg     => $pkg['sdc'],
+      mdm_ip  => $mdm_ip
+    }
+  }
+
+#  if ( 'firewall'  in $components ) {
+#    class { '::scaleio2::firewall':
+#      pkg => $pkg
+#    }
+#  }
 
 }
