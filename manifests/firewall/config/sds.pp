@@ -1,5 +1,5 @@
 
-class scaleio::firewall::sds {
+class scaleio2::firewall::config::sds inherits scaleio2::firewall::config {
 
   firewall { '001 Open Port 7072 for ScaleIO SDS':
     port   => [7072],

@@ -1,10 +1,10 @@
+class scaleio2::firewall {
 
-class scaleio2::firewall inherits scaleio2 {
-  contain scaleio::firewall::install
-  contain scaleio::firewall::config
-  contain scaleio::firewall::service
+  include ::scaleio2::firewall::config
+  include ::scaleio2::firewall::install
+  include ::scaleio2::firewall::service
 
-  Class['::scaleio::firewall::install'] ->
-  Class['::scaleio::firewall::config']  ~>
-  Class['::scaleio::firewall::service']
+  Class ['::scaleio2::firewall::install'] ->
+  Class ['::scaleio2::firewall::config'] ->
+  Class ['::scaleio2::firewall::service']
 }

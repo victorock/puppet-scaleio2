@@ -1,13 +1,8 @@
 # the installation part
-class scaleio2::sds::install inherits scaleio2::sds {
-  $version   = $scaleio2::sds::version
-  $pkg       = $scaleio2::sds::pkgs['sds']
-
-  notify { "scaleio2::sds::install->start": }
-
-  package { $pkg:
-    ensure   => $version,
+class scaleio2::sds::install {
+  notify  { "scaleio2::sds::install->start": }
+  package { "scaleio2::sds::install":
+    name => "EMC-ScaleIO-sds",
   }
-
-  notify { "scaleio2::sds::install->end": }
+  notify  { "scaleio2::sds::install->end": }
 }

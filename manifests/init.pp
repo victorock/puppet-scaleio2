@@ -17,27 +17,14 @@ class scaleio2 (
   $tb_ip                = $scaleio2::params::tb_ip,
   $use_ssd              = $scaleio2::params::use_ssd,
   $version              = $scaleio2::params::version,
+  $install_repo         = $scaleio2::params::install_repo
 
   ) inherits scaleio2::params {
-
-# Libraries
-  contain stdlib
-  contain java
-  contain firewall
-  contain scaleio2::repo
-  contain scaleio2::install
-  contain scaleio2::lia
-  contain scaleio2::mdm
-  contain scaleio2::callhome
-  contain scaleio2::gateway
-  contain scaleio2::sds
-  contain scaleio2::sdc
-  contain scaleio2::firewall
 
 # Mandatory Parameters
   validate_array($components)
   validate_array($mdm_ip)
-  validate_string($tb_ip)
+  validate_array($tb_ip)
 
 # Need to define cluster name if cluster is enabled
   if $cluster_mode {
@@ -57,16 +44,30 @@ class scaleio2 (
   if $sds_ssd_env_flag  { validate_bool($sds_ssd_env_flag)  }
   if $use_ssd           { validate_bool($use_ssd)           }
   if $version           { validate_string($version)         }
+  if $install_repo      { class { '::scaleio2::repo': }     }
 
-  class{'::scaleio2::repo':}     ->
-  class{'::scaleio2::install':}
 
-  if ( 'lia'       in $components ) { class{'scaleio2::lia':}         }
-  if ( 'mdm'       in $components ) { class{'::scaleio2::mdm':}       }
-  if ( 'callhome'  in $components ) { class{'::scaleio2::callhome':}  }
-  if ( 'gateway'   in $components ) { class{'::scaleio2::gateway':}   }
-  if ( 'sds'       in $components ) { class{'::scaleio2::sds':}       }
-  if ( 'sdc'       in $components ) { class{'::scaleio2::sdc':}       }
-  if ( 'firewall'  in $components ) { class{'::scaleio2::firewall':}  }
+  class { '::scaleio2::install': }
+
+  if ( 'lia'       in $components ) { class { '::scaleio2::lia': }       }
+
+  if ( 'mdm'       in $components ) {
+    class { '::scaleio2::mdm':
+      cluster_mode     => $cluster_mode,
+      cluster_name     => $cluster_name,
+      password         => $password,
+      tb_ip            => $tb_ip,
+      mdm_ip           => $mdm_ip,
+      sio_sds          => $sio_sds,
+      sio_sdc          => $sio_sdc,
+      ip_address_array => $ip_address_array
+    }
+  }
+
+#  if ( 'callhome'  in $components ) { class { '::scaleio2::callhome': }  }
+#  if ( 'gateway'   in $components ) { class { '::scaleio2::gateway': }   }
+#  if ( 'sds'       in $components ) { class { '::scaleio2::sds': }       }
+#  if ( 'sdc'       in $components ) { class { '::scaleio2::sdc': }       }
+#  if ( 'firewall'  in $components ) { class { '::scaleio2::firewall': }  }
 
 }

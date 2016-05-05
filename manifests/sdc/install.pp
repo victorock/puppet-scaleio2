@@ -1,6 +1,7 @@
-class scaleio2::sdc::install inherits scaleio2::sdc {
-  $version   = $scaleio2::sdc::version
-  $pkg       = $scaleio2::sdc::pkgs['sdc']
+class scaleio2::sdc::install (
+  $version   = $scaleio2::params::version,
+  $pkg       = $scaleio2::params::pkg['sdc']
+) inherits scaleio2::sdc {
 
   notify { "scaleio2::sdc::install->start": }
   package { 'scaleio2::sdc::install':

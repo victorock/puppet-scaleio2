@@ -1,5 +1,4 @@
-class scaleio2::sds::config inherits scaleio2::sds {
-
+class scaleio2::sds::config {
   $sds_ssd_env_flag        = $scaleio2::sds::sds_ssd_env_flag
   $sio_sds_network         = $scaleio2::sds::sio_sds_network
 
@@ -10,6 +9,7 @@ class scaleio2::sds::config inherits scaleio2::sds {
         path => '/etc/environment',
         match => "^CONF=",
         line => "CONF=IOPS",
+        notify  => Service['::scaleio2::sds::service'],
     }
   }
 
@@ -18,9 +18,10 @@ class scaleio2::sds::config inherits scaleio2::sds {
         path => '/etc/environment',
         match => "^FACTER_scaleio_sds_network=",
         line => "FACTER_scaleio_sds_network=${sio_sds_network}",
+        notify  => Service['::scaleio2::sds::service'],
     }
   }
 
-  
+
   notify { "scaleio2::sds::config->end": }
 }

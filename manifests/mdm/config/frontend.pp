@@ -1,4 +1,4 @@
-class scaleio2::mdm::config::frontend inherits scaleio2::mdm::config {
+class scaleio2::mdm::config::frontend {
   $sio_sdc                = $scaleio2::mdm::config::sio_sdc
   $protection_domain_name = undef
   $storage_pool_name      = undef
@@ -7,26 +7,21 @@ class scaleio2::mdm::config::frontend inherits scaleio2::mdm::config {
   $volume_size            = undef
   $sdc_ip                 = undef
 
-  contain scaleio2::mdm::config::frontend::map
   contain scaleio2::mdm::config::frontend::volume
-
-  $entries = $sio_sdc.map |$line| { split($line, ',') }
-  $clients =  $entries.slice(6).reduce( {} ) | Hash $s1, Hash $s2, Hash $s3, Hash $s4, Hash $s5, Hash $s6 | { $s1 + $s2 + $s3 + $s4 + $s5 + $s6 }
-
+  contain scaleio2::mdm::config::frontend::map
+  
   notify { "scaleio2::backend::sds::config->start": }
 
-  $servers.each |$protection_domain_name| {
-    $protection_domain_name.each |$storage_pool_name| {
-      $storage_pool_name.each |$volume_name| {
-        $volume_name.each |$volume_type| {
-          $volume_type.each |$volume_size| {
-            class['scaleio2::mdm::config::frontend::volume']
-            $volume_type.each |$sdc_ip| {
-              class['scaleio2::mdm::config::frontend::map']
-          }
-        }
-      }
-    }
+  $sio_sdc.each |$entry| {
+    $sdc_ip                 = $entry[0]
+    $protection_domain_name = $entry[1]['protection_domain_name']
+    $storage_pool_name      = $entry[1]['storage_pool_name']
+    $volume_name            = $entry[1]['volume_name']
+    $volume_type            = $entry[1]['volume_type']
+    $volume_size            = $entry[1]['volume_size']
+
+    Class['::scaleio2::mdm::config::frontend::volume'] ->
+    Class['::scaleio2::mdm::config::frontend::map']
   }
 
   notify { "scaleio2::backend::sds::config->end": }

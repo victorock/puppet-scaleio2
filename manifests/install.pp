@@ -1,4 +1,4 @@
-class scaleio2::install inherits scaleio2 {
+class scaleio2::install {
   notify { "scaleio2::install->start": }
   package { [ 'numactl', 'libaio' ] :
     ensure => present,

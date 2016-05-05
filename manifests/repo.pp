@@ -1,14 +1,11 @@
-# PRIVATE CLASS: do not use directly
+#
 class scaleio2::repo (
-  $ensure        = $scaleio2::params::ensure,
-  $version       = $scaleio2::params::version,
-  $repo_location = $scaleio2::params::repo_location,
-  $description   = undef,
-) inherits scaleio2::params {
+  $ensure             = $scaleio2::params::ensure,
+  $version            = $scaleio2::params::version,
+  $repo_location      = $scaleio2::params::repo_location,
+  $repo_description   = $scaleio2::params::repo_description
 
-  contain scaleio2::repo::apt
-  contain scaleio2::repo::yum
-  contain scaleio2::repo::zypper
+  ) inherits scaleio2::params {
 
   case $::osfamily {
     'RedHat', 'CentOS': {
@@ -17,23 +14,24 @@ class scaleio2::repo (
         $description = 'ScaleIO2 Custom Repository'
       }
       else {
-        $location = $::architecture ? {
-          'x86_64' => 'https://dl.bintray.com/emccode/scaleio2-rpm/x86_64/',
-          'i686'   => 'https://dl.bintray.com/emccode/scaleio2-rpm/i686/',
-          'i386'   => 'https://dl.bintray.com/emccode/scaleio2-rpm/i686/',
-          default  => undef
-        }
-        $description = 'ScaleIO2'
+        $location = "https://dl.bintray.com/victorock/scaleio/centos/\$releasever/x86_64/"
+        $description = 'bintray-victorock-scaleio'
       }
+
       class { '::scaleio2::repo::yum': }
+
     }
 
     'Debian', 'Ubuntu': {
       fail("Debian/Ubuntu not ready :(")
+
+      class { '::scaleio2::repo::apt': }
     }
 
     'SUSE', 'OpenSUSE': {
       fail("SUSE/OpenSUSE not ready :(")
+
+      class { '::scaleio2::repo::zypper': }
     }
 
     default: {

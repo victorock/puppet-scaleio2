@@ -9,5 +9,5 @@ class scaleio2::gateway::service inherits scaleio2::gateway {
     subscribe => File['/opt/emc/scaleio/gateway/webapps/ROOT/WEB-INF/classes/gatewayUser.properties'],
   }
 
-  notify { "scaleio2::gateway::service->start": }
+  notify { "scaleio2::gateway::service->end": }
 }

@@ -1,10 +1,10 @@
 # the installation part
-class scaleio2::mdm::service inherits scaleio2::mdm {
+class scaleio2::mdm::service {
 
-notify { "scaleio2::mdm::service->start": }
+  notify { "::scaleio2::mdm::service->start": }
 
-  service { 'scaleio2::mdm::service':
-    name      => 'mdm',
+  service { '::scaleio2::mdm::service':
+    name      => "mdm",
     ensure    => running,
     enable    => true,
     hasrestart => true,
@@ -12,5 +12,5 @@ notify { "scaleio2::mdm::service->start": }
     subscribe => File['/opt/emc/mdm/cfg/conf.txt'],
   }
 
-  notify { "scaleio2::mdm::service:start": }
+  notify { "::scaleio2::mdm::service:start": }
 }
